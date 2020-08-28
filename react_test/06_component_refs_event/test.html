@@ -7,22 +7,7 @@
 <body>
 <br>
   <div id="example">
-    <div>
-      <input/> &nbsp;
-      <button>点击提示(使用string refs)</button>&nbsp;
-
-      <input/> &nbsp;
-      <button>点击提示(使用ref回调函数)</button>&nbsp;
-
-      <input/> &nbsp;
-      <button>点击提示(使用ref容器)</button>&nbsp;
-      
-      <br/>
-      <br/>
-
-      <input placeholder="失去焦点提示"/>
-      <input placeholder="点enter键提示"/>
-    </div>
+    
   </div>
 
   <script type="text/javascript" src="../js/react.development.js"></script>
@@ -30,12 +15,95 @@
   <script type="text/javascript" src="../js/babel.min.js"></script>
 
   <script type="text/babel">
+    /* 
+    ref技术(ref容器):
+      1. 创建一个ref容器, 并保存到组件对象上
+      2. 通过ref属性将ref容器交给input  
+      3. 通过ref容器对象的current属性得到标签对象
+    react的事件
+      1. 绑定监听的属性: onXxx={处理事件的回调函数}
+      2. 内部使用的是合成事件(对原生事件的包装)
+          处理了浏览器对事件处理的不同(兼容处理)
+          在有的事件上响应时机不一样, 如change事件(相当于原生的input)
+    */
+
+
     /*
     需求: 自定义组件, 功能说明如下:
       1. 界面如果页面所示
       2. 点击按钮, 提示第一个输入框中的值
       3. 当第2个输入框失去焦点时, 提示这个输入框中的值
    */
+    class MyComponent extends React.Component {
+
+      /* 1. 创建一个ref容器, 并保存到组件对象上 */
+      inputRef = React.createRef()
+
+      hint1 = () => {
+        const input = this.refs.content
+        const value = input.value
+        if (value==='abc') {
+          input.value = ''
+          input.focus()
+        } else {
+          alert(value)
+        }
+      }
+
+      hint2 = () => {
+        alert(this.myInput.value)
+      }
+
+      hint3 = () => {
+        /* 3. 通过ref容器对象的current属性得到标签对象 */
+        alert(this.inputRef.current.value)
+      }
+
+      handleBlur = (e) => {
+        alert(e.target.value)
+      }
+      
+      handlekeyUp = (e) => {
+        if (e.keyCode===13) {
+          alert(e.target.value)
+        }
+      }
+      
+      handleChange = (e) => {
+        alert(e.target.value)
+      }
+
+
+
+      render () {
+        return (
+          <div>
+            <input ref="content"/> &nbsp;
+            <button onClick={this.hint1}>点击提示(使用string refs)</button>&nbsp;
+
+            <input ref={(input) => this.myInput = input}/> &nbsp;
+            <button onClick={this.hint2}>点击提示(使用ref回调函数)</button>&nbsp;
+            {
+               /* 通过ref属性将ref容器交给input  
+                    ==> 初始渲染时会自动将当前input保存到ref容器的current属性 
+               */
+            }
+            <input ref={this.inputRef}/> &nbsp;
+            <button onClick={this.hint3}>点击提示(使用ref容器)</button>&nbsp;
+            
+            <br/>
+            <br/>
+
+            <input placeholder="失去焦点提示" onBlur={this.handleBlur}/>
+            <input placeholder="点enter键提示" onKeyUp={this.handlekeyUp}/>
+            <input placeholder="输入过程中提示" onChange={this.handleChange}/>
+          </div>
+        )
+      }
+    
+    }
+
+    ReactDOM.render(<MyComponent/>, document.getElementById('example'))
    
   </script>
 </body>
