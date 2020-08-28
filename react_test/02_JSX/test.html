@@ -8,5 +8,47 @@
   <div id="test1"></div>
   <div id="test2"></div>
 
+  <!-- 
+    创建虚拟DOM对象的2种方式
+      1. js方式: 
+          React.createElement(tagName, [props],  [...children])
+          React.createElement('h2', {id: myId}, 'I Like You!')
+      2. jsx方式: <h1 id="bb">xxxx</h1>
+      jsx更简洁些
+    jsx的作用:
+      创建虚拟DOM
+    语法: 
+      以<开开头, 以>结尾
+      在内部用{}包含的部分是js表达式, 用在属性值和标签体文本
+    比较虚拟DOM与真实DOM
+      虚拟DOM是一个更轻的一般JS Object对象
+      只是更新虚拟DOM界面不会更新, 但真实DOM更新界面会更新
+      虚拟DOM最终会生成对应的真实DOM (虚拟DOM是真实DOM的重要信息的描述对象)
+  -->
+
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/babel.min.js"></script>
+  <script>
+    const myId = 'aa'
+    /* 1. js方式: React.createElement(tagName, [props],  [...children]) */
+    // 1. 创建虚拟DOM
+    const vdom1 = React.createElement('h2', {id: myId}, 'I Like You!', React.createElement('span', {}, 'yyy'))
+    console.dir(vdom1)
+    console.dir(document.getElementById('test1'))
+    // 2. 渲染虚拟DOM
+    ReactDOM.render(vdom1, document.getElementById('test1'))
+  </script>
+
+  <script type="text/babel">
+    const id = 'cc'
+    const myXxx = 'cba'
+    const content = 'I Will Back!'
+    /* 2. jsx方式: <h1 id="bb">xxxx</h1> */
+    const vdom2 = <h3 id={id} xxx={myXxx}>---{content}---  <span>yyy</span></h3>
+    ReactDOM.render(vdom2, document.getElementById('test2'))
+  </script>
+
+
 </body>
 </html>
