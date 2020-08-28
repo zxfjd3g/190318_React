@@ -24,6 +24,7 @@
       1. 绑定监听的属性: onXxx={处理事件的回调函数}
       2. 内部使用的是合成事件(对原生事件的包装)
           处理了浏览器对事件处理的不同(兼容处理)
+          内部使用的是事件委托
           在有的事件上响应时机不一样, 如change事件(相当于原生的input)
     */
 
@@ -73,7 +74,30 @@
         alert(e.target.value)
       }
 
+      /* 
+      如何向事件回调函数传入自己的参数
+      1. 在外面包一层函数作为事件回调函数
+      2. 利用bind来强制预设参数
+      3. 返回事件回调函数的函数 
 
+      高阶函数:
+        情况1: 返回值是函数的函数: bind()
+        情况2: 参数是函数的函数: 数组的一系列声明式的方法 / Promise & then / 定时器
+      */
+
+      handleClick1 =  (e, content) => {
+        alert(content + '--' + e.target.innerHTML)
+      }
+
+      handleClick2 = (content, e) => {
+        alert(content + '--' + e.target.innerHTML)
+      }
+
+      handleClick3 = (content) => {
+        return (e) => {
+          alert(content + '--' + e.target.innerHTML)
+        }
+      }
 
       render () {
         return (
@@ -97,11 +121,22 @@
             <input placeholder="失去焦点提示" onBlur={this.handleBlur}/>
             <input placeholder="点enter键提示" onKeyUp={this.handlekeyUp}/>
             <input placeholder="输入过程中提示" onChange={this.handleChange}/>
+
+            <br/>
+            <button onClick={(e) => this.handleClick1(e, 'abc')}>测试传入自己的数据</button>
+            <button onClick={this.handleClick2.bind(this, 'cba')}>测试传入自己的数据2</button>
+            <button onClick={this.handleClick3('cba')}>测试传入自己的数据3</button>
           </div>
         )
       }
     
     }
+
+    // function fn(a, b) {
+      
+    // }
+    // const obj = {}
+    // fn.bind(obj, 1)(event) 
 
     ReactDOM.render(<MyComponent/>, document.getElementById('example'))
    
