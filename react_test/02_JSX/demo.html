@@ -12,6 +12,36 @@
   <script type="text/javascript" src="../js/react.development.js"></script>
   <script type="text/javascript" src="../js/react-dom.development.js"></script>
   <script type="text/javascript" src="../js/babel.min.js"></script>
+  <script type="text/babel">
 
+    /* 
+    React在渲染数组时, 会自动遍历显示所有数组元素
+    根据数据数组生成标签数组
+    所有标签的数组中的每个标签都需要有一个唯一的key属性
+    */
+
+    const names = ['A', 'B', 'C', 'D']
+
+    // 创建虚拟DOM
+    // const ul = <ul>{names}</ul>
+    // 根据数据数组生成标签数组
+    const lis = names.map(name => <li key={name}>{name}</li>);
+    const ul = <ul>{lis}</ul>
+
+    // 渲染虚拟DOM
+    ReactDOM.render(ul, document.getElementById('root'))
+
+
+    // 简洁写法  在项目开发中用得比较多
+    const ul2 = (
+      <ul>
+        {
+          names.map(name => <li key={name}>{name}</li>)
+        }
+      </ul>
+    )
+    ReactDOM.render(ul2, document.getElementById('root2'))
+
+  </script>
 </body>
 </html>
