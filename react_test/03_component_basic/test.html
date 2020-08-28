@@ -14,7 +14,67 @@
   <script type="text/javascript" src="../js/babel.min.js"></script>
 
   <script type="text/babel">
+    /* 
+    定义组件的2种方式:
+      函数组件: 简单的无状态组件
+      类组件: 可以有状态的组件
 
+    渲染函数组件的流程
+      1. 调用组件函数得到虚拟DOM对象
+      2. 生成对应的真实DOM
+      3. 插入到页面真实容器DOM中
+    渲染类组件的流程
+      1. 创建组件类的实例对象
+      2. 调用其render方法得到虚拟DOM
+      3. 生成对应的真实DOM
+      4. 插入到页面真实容器DOM中
+    区别函数组件和类组件
+      函数组件: 不会创建实例对象, 效率相对高些, 但不能有自己的state
+      类组件: 会创建实例对象, 效率相对低些, 但可以有自己的state
+
+    注意:
+      组件名首字母必须大写(为了与html标签区别开)
+      组件只能有一个根标签
+    
+    */
+    
+    // 1. 定义组件
+    /* 函数组件: 简单的无状态组件 */
+    function FuncComponent() { 
+      console.log('FuncComponent', this)
+      return <h2>函数组件(无状态)</h2>  // 返回要显示的虚拟DOM
+    }
+
+    /* 类组件: 可以有状态的组件 */
+    class ClassComponent extends React.Component {
+      // 必须重写render方法, 返回要显示的虚拟DOM
+      render () {
+        console.log('ClassComponent render', this)
+        return (
+          <div>
+            <h2>类组件(可以有状态)</h2>
+            <h2>类组件(可以有状态)</h2>
+          </div>
+        )
+      }
+    }
+
+    // 2. 渲染组件标签
+    /* 
+    渲染函数组件的流程
+    1. 调用组件函数得到虚拟DOM对象
+    2. 生成对应的真实DOM
+    3. 插入到页面真实容器DOM中
+    */
+    ReactDOM.render(<FuncComponent />, document.getElementById('example1'))
+    /* 
+    渲染类组件的流程
+    1. 创建组件类的实例对象
+    2. 调用其render方法得到虚拟DOM
+    3. 生成对应的真实DOM
+    4. 插入到页面真实容器DOM中
+    */
+    ReactDOM.render(<ClassComponent />, document.getElementById('example2'))
   </script>
 </body>
 </html>

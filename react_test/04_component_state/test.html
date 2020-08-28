@@ -19,6 +19,59 @@
     2. 点击标题更新为: 我喜欢你
   */
 
+  /* 
+  state的3个操作
+    1. 初始化状态数据: this.state = {属性数据}
+    2. 读取状态数据显示: this.state.xxx
+    3. 更新状态数据: this.setState({新的属性数据})
+  this的问题:
+    在React中, 它提供的组件的方法this都是组件对象, 但我们定义的方法this默认都是undefined
+    如何让我们定义的方法中的this是组件对象呢?
+      方式一: 箭头函数   ==> 基本都用它
+      方式二: 利用bind强制绑定this为组件对象  ==> 不怎么用
+  */
+  // 定义组件
+  class Like extends React.Component {
+    constructor (props) {
+      super(props) // 调用父类的构造器
+      /* 1. 初始化状态数据 */
+      this.state = { 
+        isLikeMe: false 
+      }
+
+      // this.handleClick = this.handleClick.bind(this)
+    }
+
+    /* 
+    在React中, 它提供的组件的方法this都是组件对象, 但我们定义的方法this默认都是undefined
+    如何让我们定义的方法中的this是组件对象呢?
+      方式一: 箭头函数   ==> 基本都用它
+      方式二: 利用bind强制绑定this为组件对象  ==> 不怎么用
+    */
+    // handleClick () {
+    handleClick =  () => {
+      console.log('handleClick', this)
+      
+      // this.state.isLikeMe = !this.state.isLikeMe  // 界面不会自动更新
+      // 必须调用组件对象的setState()更新状态数据, 界面才会自动更新
+      this.setState({
+        isLikeMe: !this.state.isLikeMe
+      })
+    }
+
+    render () {
+      /* 2. 读取状态数据显示 */
+      // const isLikeMe = this.state.isLikeMe
+      const {isLikeMe} = this.state
+      const text = isLikeMe ? '你喜欢我' : '我喜欢你'
+      return <h1 onClick={this.handleClick}>{text}</h1>
+    }
+  }
+
+  // 渲染组件标签
+  ReactDOM.render(<Like/>, document.getElementById('root'))
+
+
 </script>
 </body>
 </html>
