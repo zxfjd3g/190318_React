@@ -12,15 +12,73 @@
 
 <script type="text/javascript" src="../js/react.development.js"></script>
 <script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
 <script type="text/javascript" src="../js/babel.min.js"></script>
 
 <script type="text/babel">
 
+/* 
+1. 给组件标签指定标签属性
+2. 在组件内部读取传入的标签属性数据
+3. 对props进行一定限定
+注意: 不要在直接修改props数据
+*/
+
   /*
   需求: 自定义用来显示一个人员信息的组件, 效果如页面. 说明
-  1). 如果性别没有指定, 默认为男
-  2). 如果年龄没有指定, 默认为18
+  1). 姓名必须指定
+  2). 如果性别没有指定, 默认为男
+  3). 如果年龄没有指定, 默认为18
   */
+
+  class Person extends React.Component {
+    /* 对prop进行一定约定: 名称/值的类型/必要性 */
+    static propTypes = { // 给Person本身添加属性
+      name: PropTypes.string.isRequired,
+      age: PropTypes.number,
+      sex: PropTypes.string
+    }
+    /* 指定属性默认值 */
+    static defaultProps = {
+      age: 18,
+      sex: '男'
+    }
+
+    render () {
+      /* 在组件内部读取传入的标签属性数据 */
+      const {name, age, sex} = this.props
+      return (
+        <ul>
+          <li>姓名: {name}</li>  
+          <li>性别: {sex}</li>  
+          <li>年龄: {age}</li>  
+        </ul>
+      )
+    }
+  }
+
+  /* 对prop进行一定约定: 名称/值的类型/必要性 */
+  // Person.propTypes = {
+  //   name: PropTypes.string.isRequired,
+  //   age: PropTypes.number,
+  //   sex: PropTypes.string
+  // }
+
+  const p = {
+    name: 'tom',
+    age: 12,
+    sex: '男'
+  }
+
+  // ReactDOM.render(<Person name={p.name} age={p.age} sex={p.sex}/>, document.getElementById('example1'))
+  ReactDOM.render(<Person {...p}/>, document.getElementById('example1'))
+
+  const p2 = {
+    myName: 'tom22',
+  }
+  ReactDOM.render(<Person name={p2.myName}/>, document.getElementById('example2'))
+
+
 </script>
 </body>
 </html>
