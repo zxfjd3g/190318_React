@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>01_HelloWorld</title>
+</head>
+<body>
+
+  <div id="test"></div>
+
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/babel.min.js"></script>
+
+  <script type="text/babel"> /* 告诉babel先编译/解析后再运行 */
+    // 1. 创建虚拟DOM对象
+    const vdom = <h1>Hello React</h1>  // Uncaught SyntaxError: Unexpected token '<'
+    console.log(vdom)
+    console.dir(document.getElementById('test'))
+    // 2. 渲染虚拟DOM
+    ReactDOM.render(vdom, document.getElementById('test'))
+  </script>
+
+</body>
+</html>
