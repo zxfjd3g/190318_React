@@ -131,7 +131,8 @@
 		getDerivedStateFromProps()
 		getSnapshotBeforeUpdate()
 
-1). react/vue中的key的作用/内部原理
+
+## react/vue中的key的作用/内部原理
 	2). 为什么列表的key尽量不要用index
 	
 	分析: 在更新时, key用来决定根据虚拟DOM如何得到真实DOM(复用用原本或新创建)
@@ -141,3 +142,14 @@
 	如果用下标作为key, 只要做添加/删除/排序操作, 就会导致数据对象的key值发生变化 
 		==> 有可能需要新创建/复用别的数据的真实DOM
 	如果用id作为key, 做添加/删除/排序操作, 不会改变数据对象的key值  ==> 就可以复用原本对应的真实DOM
+
+## 使用react脚手架
+	下载: npm i -g create-react-app
+	创建项目: create-react-app react-app
+	开发环境运行: yarn run start
+	生产环境打包运行: yarn run build / serve build (npm i -g serve)
+
+	react组件中图片必须通过import先引入后再使用
+	组件中的class只能写成className, style必须指定为{{}}
+	PWA: 在离线状态下可以访问(内部自动做了一些浏览器端的页面存储) ==> 必须在生产环境下才可以
+	React.StrictMode: 对react的语法进行检查, 一旦写了不太好的语法就提示  ==> 必须在开发环境
