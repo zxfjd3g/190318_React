@@ -14,9 +14,66 @@
   /*
   需求: 自定义组件
     1. 让指定的文本做显示/隐藏的动画
-    2. 切换时间为2S
+    2. 切换时间为2S 
     3. 点击按钮从界面中移除组件界面
    */
+
+  class Fade extends React.Component {
+
+    state = {
+      opacity: 1
+    }
+
+    /* 
+    初始显示(render())之后执行一次
+    一般在此启动异步任务: 定时器/发ajax请求/订阅消息
+     */
+    componentDidMount () {
+      // 每隔200ms将opacity值减少0.1
+      this.interverId = setInterval(() => {
+        console.log('======')
+        let {opacity} = this.state
+        opacity -= 0.1
+        if (opacity<=0) {
+          opacity = 1
+        }
+        this.setState({
+          opacity
+        })
+      }, 200)
+    }
+
+    componentWillUnmount () {
+      // 清除定时器
+      clearInterval(this.interverId)
+    }
+
+    /* 
+    在组件被卸载前调用
+    一般在此做一些收尾的工作
+    */
+    unmount () {
+      // 卸载指定容器div中的组件
+      ReactDOM.unmountComponentAtNode(document.getElementById('example'))
+    }
+
+    render () {
+      console.log('render()')
+      const {opacity} = this.state
+      return (
+        <div> {/* :style="{opacity}" */}
+          <p style={{opacity}}>React太简单了!</p>
+          <button onClick={this.unmount}>不用学了</button>
+        </div>
+      )
+    }
+  }
+
+  
+
+  ReactDOM.render(<Fade/>, document.getElementById('example'))
+
+
 </script>
 </body>
 </html>

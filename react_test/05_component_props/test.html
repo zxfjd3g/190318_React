@@ -32,6 +32,16 @@
   */
 
   class Person extends React.Component {
+
+    // constructor (props) {
+    //   super(props) // 必须调用super
+    //   // console.log(this.props.name) // 如果需要在super后调用this.props, 必须super(props)
+    // }
+    /*  默认
+    constructor () {
+      super()
+    } */
+
     /* 对prop进行一定约定: 名称/值的类型/必要性 */
     static propTypes = { // 给Person本身添加属性
       name: PropTypes.string.isRequired,
@@ -57,6 +67,27 @@
     }
   }
 
+  function Person2 (props) {
+    return (
+        <ul>
+          <li>姓名: {props.name}</li>  
+          <li>性别: {props.sex}</li>  
+          <li>年龄: {props.age}</li>  
+        </ul>
+      )
+  }
+
+  Person2.propTypes = {
+    name: PropTypes.string.isRequired,
+    age: PropTypes.number,
+    sex: PropTypes.string
+  }
+
+  Person2.defaultProps = {
+    age: 19,
+    sex: '女'
+  }
+
   /* 对prop进行一定约定: 名称/值的类型/必要性 */
   // Person.propTypes = {
   //   name: PropTypes.string.isRequired,
@@ -77,6 +108,7 @@
     myName: 'tom22',
   }
   ReactDOM.render(<Person name={p2.myName}/>, document.getElementById('example2'))
+  ReactDOM.render(<Person2 name={'bob'}/>, document.getElementById('example3'))
 
 
 </script>
