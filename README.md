@@ -87,3 +87,46 @@
 		const f1 = sum2(1)
 		const f2 = f1(2)
 		f2(3)
+
+## 组件对象的生命周期
+	1). React组件对象生命周期的3个阶段  (为了面试)
+		1.初始化阶段
+			constructor
+			componentWillMount
+			render
+			componentDidMount
+	
+		2.更新阶段
+			当前组件setState()更新
+				shouldComponentUpdate   // 返回true下面3个方法就会执行, 否则不会执行
+				componentWillUpdate
+				render
+				componentDidUpdate
+			当前组件forceUpdate()更新 // 一定更新, 不经过是否应该更新的判断
+				componentWillUpdate
+				Child render
+				componentDidUpdate
+			父组件更新 setState()/forceUpdate()
+				componentWillReceiveProps
+				shouldComponentUpdate
+				componentWillUpdate
+				render
+				componentDidUpdate
+	
+		3.卸载阶段: ReactDOM.unmountComponentAtNode() / 父组件不再渲染子组件
+			componentWillUnmount
+	
+	2) 重要的几个勾子
+		constructor: 创建组件实例对象时调用
+		render: 必须有, 返回要渲染显示的虚拟DOM
+		componentDidMount(): 执行一次性异步任务: ajax请求/定时器/绑定监听/订阅消息
+		componentWillUnMount: 做一些收尾的工作: 清除定时器/解绑监听/取消订阅
+		shouldComponentUpdate: 组件优化时使用 ==> PureComponent
+	
+	3). 不安全的几个方法  ==> 用得很少 (了解)
+		componentWillMount()
+		componentWillReceiveProps()
+		componentWillUpdate()
+	4). 新版本的生命周期多了2个方法  ==> 用得很少 (了解)
+		getDerivedStateFromProps()
+		getSnapshotBeforeUpdate()

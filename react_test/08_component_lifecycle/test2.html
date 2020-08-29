@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>08_ComponentLife</title>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+
+  class Parent extends React.Component {
+
+    state = {
+      msg2: 'cba',
+      isShowChild: true
+    }
+
+    update1 = () => {
+      this.setState({
+        msg2: this.state.msg2 + '++'
+      })
+      // this.setState({})
+    }
+    update2 = () => {
+      this.setState({
+        isShowChild: !this.state.isShowChild
+      })
+    }
+
+    render () {
+      console.log('Parent render()')
+      const {msg2, isShowChild} = this.state
+      return (
+        <div style={{border: '1px solid #cccccc', padding: '10px'}}>
+          <h2>Parent组件标题</h2>
+          <h4>state msg2: {msg2}</h4>
+          <button onClick={this.update1}>更新数据</button>
+          <button onClick={this.update2}>切换Child显示/隐藏</button>
+          <br/>
+          <br/>
+          {isShowChild && <Child msg2={msg2}/>}
+          {/* isShowChild ? <Child msg2={msg2}/> : null */}
+        </div>
+      )
+    }
+  }
+
+  // class Child extends React.Component {
+  class Child extends React.PureComponent {
+
+    state = {
+      msg1: 'abc'
+    }
+
+    constructor (props) {
+      super(props)
+      console.log('-Child constructor')
+    }
+
+    componentWillMount () {
+      console.log('-Child componentWillMount')
+    }
+
+    componentDidMount () {
+      console.log('-Child componentDidMount')
+    }
+
+    componentWillReceiveProps () {
+      console.log('-Child componentWillReceiveProps')
+    }
+
+    // shouldComponentUpdate (newProps, newState) {
+    //   console.log('-Child shouldComponentUpdate')
+    //   // 只有当props数据发生了改变或者当state数据发生改变才返回true ==> 进入更新的流程
+    //   if (newProps.msg2!==this.props.msg2 || newState.msg1!==this.state.msg1) {
+
+    //     return true
+    //   }
+
+    //   return false  // ==> 不进入更新流程
+    // }
+
+    componentWillUpdate () {
+      console.log('-Child componentWillUpdate')
+    }
+    componentDidUpdate () {
+      console.log('-Child componentDidUpdate')
+    }
+
+    componentWillUnmount () {
+      console.log('-Child componentWillUnmount')
+    }
+
+    update1 = () => {
+      this.setState({
+        msg1: this.state.msg1 + '--'
+      })
+      // this.setState({})
+    }
+    update2 = () => {
+      this.forceUpdate()
+    }
+
+    unmount () {
+      // 卸载指定容器div中的组件
+      ReactDOM.unmountComponentAtNode(document.getElementById('example'))
+    }
+
+    render () {
+      console.log('-Child render()')
+      const {msg1} = this.state
+      const {msg2} = this.props
+      return (
+        <div style={{border: '1px solid #aaaaaa', padding: '10px'}}>
+          <h3>Child组件标题</h3>
+          <h4>state msg1: {msg1}</h4>
+          <h4>props msg2: {msg2}</h4>
+          <button onClick={this.update1}>常规更新</button>
+          <button onClick={this.update2}>强制更新</button>
+          <button onClick={this.unmount}>卸载</button>
+        </div>
+      )
+    }
+  }
+
+  ReactDOM.render(<Parent/>, document.getElementById('example'))
+</script>
+</body>
+</html>
