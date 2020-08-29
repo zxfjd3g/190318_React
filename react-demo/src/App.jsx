@@ -21,6 +21,9 @@ export default class App extends Component {
 
   id = 4 // 用来保存最新可用的id值, 它会不断递增
 
+  /* 
+  添加todo
+  */
   addTodo = (title) => {
 
     // 创建todo对象
@@ -41,6 +44,63 @@ export default class App extends Component {
     this.setState({todos})
   }
 
+  /* 
+  删除todo
+  */
+  deleteTodo = (id) => {
+    // 过滤掉index对应的todo, 产生一个新todos
+    const todos = this.state.todos.filter(todo => todo.id!==id)
+    // 更新状态
+    this.setState({
+      todos
+    })
+  }
+
+  /* 
+  切换指定改变勾选状态
+  */
+  toggleTodoCheck = (id) => {
+    // 切换id对应的todo的complete值, 产生一个新todos
+    const todos = this.state.todos.map(todo => {
+      if (id===todo.id) { // 产生一个id对应的新todo
+        return {...todo, complete: !todo.complete}
+      } else { // 直接使用原来的
+        return todo
+      }
+    })
+    // 更新状态
+    this.setState({
+      todos
+    })
+  }
+
+  /* 
+  全选/全不选
+  */
+  checkAllTodos = (isCheck) => {
+
+    // 将todos中所有todo的complete指定为isCheck, 返回新的todos
+    const todos = this.state.todos.map(todo => ({...todo, complete: isCheck}))
+
+    // 更新状态
+    this.setState({
+      todos
+    })
+  }
+
+  /* 
+  删除所有已完成的todo
+  */
+  clearAllCompleteTodos = () => {
+    // 过滤掉todos中complete为true的所有todo, 返回新的todos
+    const todos = this.state.todos.filter(todo => !todo.complete)
+
+    // 更新状态
+    this.setState({
+      todos
+    })
+  }
+
   render () {
     const {todos} = this.state
 
@@ -48,8 +108,8 @@ export default class App extends Component {
     <div className="todo-container">
       <div className="todo-wrap">
         <Header addTodo={this.addTodo}/>
-        <List todos={todos}/>
-        <Footer/>
+        <List todos={todos} deleteTodo={this.deleteTodo} toggleTodoCheck={this.toggleTodoCheck}/>
+        <Footer todos={todos} checkAllTodos={this.checkAllTodos} clearAllCompleteTodos={this.clearAllCompleteTodos}/>
       </div>
     </div>
     )
