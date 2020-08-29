@@ -28,10 +28,31 @@
               销毁原来的真实DOM, 根据item数据创建新的真实DOM显示(即使item数据没有变)
    2. key为index的问题
       1). 添加/删除/排序 => 产生没有必要的真实DOM更新 ==> 界面效果没问题, 但效率低
-      2). 如果item界面还有输入框 => 产生错误的真实DOM更新 ==> 界面有问题
+      2). 如果item界面还有输入框 => 复用了错误的真实DOM ==> 界面有问题
       注意: 如果不存在添加/删除/排序操作, 用index没有问题
    3. 解决:
       使用item数据的标识数据作为key, 比如id属性值
+
+      [
+        {id: 1, name: 'Tom', age: 13},
+        {id: 2, name: 'Jack', age: 12}
+      ]
+
+      key是index
+        li key=0 {id: 1, name: 'Tom', age: 13},   ===> vdom0 ===> 真实DOM
+        li key=1 {id: 2, name: 'Jack', age: 12}  ===> vdom1  ===> 真实DOM
+
+      li key=0 {id: 3, name: 'Bob', age: 14}  ==> vdom  ==> 复用Tom的真实DOM(更新)     应该创建一个新的真实DOM
+      li key=1 {id: 1, name: 'Tom', age: 13}, ==> vdom1 ==> 复用Jack的真实DOM(更新)    应该复用TOM自己的真实DOM
+      li key=2 {id: 2, name: 'Jack', age: 12} ==> vdom2 ==> 创建新的真实DOM            应该复用JACK自己的真实DOM
+
+      key是id
+        li key=1 {id: 1, name: 'Tom', age: 13},   ===> vdom1 ===> 真实DOM
+        li key=2 {id: 2, name: 'Jack', age: 12}  ===> vdom2  ===> 真实DOM
+
+      li key=3 {id: 3, name: 'Bob', age: 14}  ==> vdom3  ==> 创建新的真实DOM 
+      li key=1 {id: 1, name: 'Tom', age: 13}, ==> vdom1 ==> 复用TOM自己的真实DOM
+      li key=2 {id: 2, name: 'Jack', age: 12} ==> vdom2 ==> 复用JACK自己的真实DOM
    */
 
   class PersonList extends React.Component {
