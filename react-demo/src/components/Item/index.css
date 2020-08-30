@@ -1,33 +1,27 @@
 li {
-  list-style: none;
-  height: 36px;
-  line-height: 36px;
-  padding: 0 5px;
-  border-bottom: 1px solid #ddd;
+  transition: .5s;
+  overflow: hidden;
 }
 
-li label {
-  float: left;
-  cursor: pointer;
+.handle {
+  width: 40px;
+  border: 1px solid #ccc;
+  background: #fff;
+  position: absolute;
+  right: 10px;
+  top: 1px;
+  text-align: center;
 }
 
-li label li input {
-  vertical-align: middle;
-  margin-right: 6px;
-  position: relative;
-  top: -1px;
+.handle a {
+  display: block;
+  text-decoration: none;
 }
 
-li button {
-  float: right;
-  display: none;
-  margin-top: 3px;
+.list-group-item .centence {
+  padding: 0px 50px;
 }
 
-li:before {
-  content: initial;
-}
-
-li:last-child {
-  border-bottom: none;
+.user {
+  font-size: 22px;
 }
