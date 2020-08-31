@@ -178,6 +178,9 @@
 			删除所有选中的
 
 ## 如何自定义create-react-app的配置
+	0) 目标
+		指定模块路径别名@
+		禁用eslint
 	1). 暴露其配置后再修改
 		yarn run eject
 		修改暴露出来的webpack相关配置
@@ -197,10 +200,35 @@
 			const {
 			  override,
 			  disableEsLint,
+			  addWebpackAlias
 			} = require("customize-cra");
-			// const path = require("path");
+			const path = require("path");
 			
 			module.exports = override(
 			  // 禁用eslint
 			  disableEsLint(),
-			);		
+			
+			  // 配置模块路径别名
+			  addWebpackAlias({
+			    '@': path.resolve(__dirname, 'src') // src的绝对路径
+			  })
+			);	
+
+## 配置代理解决ajax跨域
+	方式一: 在package.json中配置
+		"proxy": "http://localhost:4000"
+		不足: 只能配置一个后台服务器(单一后台)
+	方式二: 利用http-proxy-middlewares配置多个后台
+		创建代理的配置文件: src/setupProxy.js
+			const proxy = require('http-proxy-middleware');
+			module.exports = function (app) {
+			  app.use('/api', proxy({
+			    target: ' http://172.16.30.166:8000',
+			    pathRewrite: {
+			      '^/api': ''
+			    },
+			    changeOrigin: true,
+			  }));
+			};
+		在入口js中引入加载
+			import './setupProxy'
