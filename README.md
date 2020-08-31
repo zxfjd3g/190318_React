@@ -214,11 +214,30 @@
 			  })
 			);	
 
+## 区别ajax请求与一般HTTP请求
+    ajax请求是一种特别的http请求: 只有通过XHR/fetch发送的是ajax请求, 其它都是一般HTTP请求
+    对服务器端来说, 没有任何区别, 区别在浏览器端
+    浏览器端发请求: 只有XHR或fetch发出的才是ajax请求, 其它所有的都是非ajax请求
+    浏览器端接收到响应
+        一般请求: 浏览器一般会直接显示响应体数据, 也就是我们常说的刷新/跳转页面
+        ajax请求: 浏览器不会对界面进行任何更新操作, 只是调用监视的回调函数并传入响应相关数据
+
+## 发送ajax请求:
+	使用什么发ajax请求?
+		原生XHR
+		jQuery
+		axios
+		原生fetch + 兼容包
+
+	什么时候发ajax请求?
+		componentDidMount()
+		事件回调函数
+
 ## 配置代理解决ajax跨域
 	方式一: 在package.json中配置
 		"proxy": "http://localhost:4000"
 		不足: 只能配置一个后台服务器(单一后台)
-	方式二: 利用http-proxy-middlewares配置多个后台
+	方式二: 利用http-proxy-middlewares配置多个代理后台
 		创建代理的配置文件: src/setupProxy.js
 			const proxy = require('http-proxy-middleware');
 			module.exports = function (app) {
@@ -232,3 +251,55 @@
 			};
 		在入口js中引入加载
 			import './setupProxy'
+
+## state数据定义在哪个组件
+	props方案
+		状态提升: 如果是某个组件用就放在这个组件内, 如果是某些组件用放在共同的父组件中
+	pubsub方案
+		数据放在需要显示的组件内, 再通过PubSub分发给需要这个数据的其它组件
+	redux方案
+		多个组件共享(用)的数据交给redux管理: 有的组件要读, 有的组件要更新, 都需要找redux的store对象
+
+
+## 更新状态(state/data)数据
+	vue中: 
+		直接更新目标数据即可: this.xxx = value
+	React中:
+		必须通过this.setState({xxx: value})来更新
+		不要直接修改state数据, 而要指定一个新的数据(很可能依赖于原来state数据)
+
+## React组件间通信
+	1) props
+		父子组件间相互通信
+		父 --> 子: 非函数props  父组件将数据交给子组件是让子组件读取显示, 不能直接更新
+		子 --> 父: 函数props 子组件调用父组件传入的函数, 将数据以参数的形式传递父组件,从而更新父组件数据
+		问题: 祖孙组件/兄弟组件会比较麻烦
+	
+	2) refs
+		父子组件间通信: 父组件主动进攻
+		父组件得到子组件对象, 从而可以读取其状态数据或调用其方法更新其状态数据
+	
+	3) pubsub
+		任意组件间(非父子组件)通信
+		订阅消息(接收数据): 
+			const token = PubSub.subscribe('msgName', (msgName, data) => {});
+			const token2 = PubSub.subscribe('msgName', (msgName, data) => {});
+		发布消息(发送数据): PubSub.publish('msgName', data)
+		取消订阅: PubSub.unsubscribe(token/msgName);
+
+
+## ES6常用新语法
+	1) 定义常量/变量:  const/let
+	2) 解构赋值: const {a, b} = this.props   import {aa} from 'xxx'  function ({name, age}) {}
+	3) 对象的简洁表达: {a, b, c(){}}
+	4) 箭头函数: 
+		a.常用场景
+			* 组件的自定义方法: xxx = () => {}
+			* 参数匿名函数
+		b.优点:
+			* 简洁
+			* 没有自己的this,使用引用this查找的是外部this
+	5) 扩展(三点)运算符: 拆解对象(const MyProps = {}, <Xxx {...MyProps}>)  [a, ...b]  {...obj}
+	6) 类:  class/extends/constructor/super/static
+	7) ES6模块化:  export default | import
+	8) promise / async&await

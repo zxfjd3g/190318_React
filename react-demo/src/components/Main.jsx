@@ -51,36 +51,6 @@ export default class Main extends Component {
         errorMsg: '请求出错: ' + error.message
       })
     })
-
-    try {
-      
-
-
-      
-      const response = await axios.get('/api/search/users', {
-        params: {
-          q: searchName
-        }
-      })
-      const result = response.data
-      const users = result.items.map(item => ({ // 需要对得到的数据进行整理操作
-        id: item.id,
-        name: item.login,
-        avatar_url: item.avatar_url,
-        url: item.html_url
-      }))
-      // 更新状态(成功的)
-      this.setState({
-        loading: false,
-        users
-      })
-    } catch (error) {
-      // 更新状态(失败的)
-      this.setState({
-        loading: false,
-        errorMsg: '请求出错: ' + error.message
-      })
-    }
   }
 
   getUsers_axios = async (searchName) => {
