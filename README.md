@@ -104,7 +104,7 @@
 				componentDidUpdate
 			当前组件forceUpdate()更新 // 一定更新, 不经过是否应该更新的判断
 				componentWillUpdate
-				Child render
+				render
 				componentDidUpdate
 			父组件更新 setState()/forceUpdate()
 				componentWillReceiveProps
@@ -128,11 +128,11 @@
 		componentWillReceiveProps()
 		componentWillUpdate()
 	4). 新版本的生命周期多了2个方法  ==> 用得很少 (了解)
-		getDerivedStateFromProps()
-		getSnapshotBeforeUpdate()
+		static getDerivedStateFromProps()
+		static getSnapshotBeforeUpdate()
 
 
-## react/vue中的key的作用/内部原理
+## react/vue中的key的作用/内部原理  (面试)
 	2). 为什么列表的key尽量不要用index
 	
 	分析: 在更新时, key用来决定根据虚拟DOM如何得到真实DOM(复用用原本或新创建)
