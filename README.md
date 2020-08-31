@@ -236,7 +236,7 @@
 ## 配置代理解决ajax跨域
 	方式一: 在package.json中配置
 		"proxy": "http://localhost:4000"
-		不足: 只能配置一个后台服务器(单一后台)
+		不足: 只能配置一个后台服务器(单一代理后台)
 	方式二: 利用http-proxy-middlewares配置多个代理后台
 		创建代理的配置文件: src/setupProxy.js
 			const proxy = require('http-proxy-middleware');
@@ -287,6 +287,9 @@
 		发布消息(发送数据): PubSub.publish('msgName', data)
 		取消订阅: PubSub.unsubscribe(token/msgName);
 
+	4) Context  ==> provider&inject
+
+	5) redux	
 
 ## ES6常用新语法
 	1) 定义常量/变量:  const/let
@@ -299,6 +302,7 @@
 		b.优点:
 			* 简洁
 			* 没有自己的this,使用引用this查找的是外部this
+			* 不能创建实例对象
 	5) 扩展(三点)运算符: 拆解对象(const MyProps = {}, <Xxx {...MyProps}>)  [a, ...b]  {...obj}
 	6) 类:  class/extends/constructor/super/static
 	7) ES6模块化:  export default | import

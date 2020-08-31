@@ -7,6 +7,12 @@ export default class Search extends Component {
     searchName: ''
   }
 
+  updateSearchName = (msg) => {
+    this.setState({
+      searchName: this.state.searchName + msg
+    })
+  }
+
   handleClick = () => {
     const {searchName} = this.state
     if (searchName) {

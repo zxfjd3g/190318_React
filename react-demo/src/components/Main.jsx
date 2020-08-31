@@ -19,7 +19,15 @@ export default class Main extends Component {
       // 使用fetch发ajax请求
       this.getUsers_fetch(searchName)
     })
-  } 
+  }
+
+  /* 
+  在组件死亡前
+  */
+  componentWillUnmount () {
+    // 取消订阅
+    PubSub.unsubscribe('search')
+  }
 
   getUsers_fetch = async (searchName) => {
     // alert(searchName)
