@@ -307,3 +307,51 @@
 	6) 类:  class/extends/constructor/super/static
 	7) ES6模块化:  export default | import
 	8) promise / async&await
+
+## react-router-dom
+	作用: 实现基本react的SPA
+	相关的组件:
+		HashRouter: hash路由, 路径带#, 
+				刷新路由路径, #路径部分不提交, 提交的总是根路径, 得到index页面, 加载js解析#路径得到对应的路由组件显示
+		BrowserRouter: history路由, 路径不带#, 刷新路由路径提交完整路径 ==> 404 ==> 配置webpack/nginx返回index页面
+		Route: 配置路由, path/compoent
+		Switch: 不用Switch会渲染所有指定<Route>, 而使用Switch只渲染匹配的第一个路由的<Route>
+		Redirect: 重定向指定路径, 匹配任意, 一般放在最后==> 前面都不匹配就使用它
+		NavLink: 导航路由链接, 当前路由链接就会有特定类名, 用来定义特定样式
+		Link: 一般路由链接, 所有都一样, 用于不需要指定当前路由链接的特定样式的情况
+	相关对象或函数:
+		props.history: 对象, 包含控制路由跳转的一些方法, 如: push()/replace()/goBack()
+		props.location: 对象, 包含路由相关信息的对象, 如: pathname / search / state
+		props.match: 对象, 包含路由相关信息的对象, 如: params
+		
+		withRouter: 函数, 包装非路由组件返回一个新组件 ==> 向非路由组件传递上面3个属性
+				==> 如果一个非路由组件要操作路由, 就需要用withRouter包装
+	
+	跳转路由的2种方式
+		声明式: 通过路由链接点击跳转  ==> 用于跳转前没有逻辑处理的场景
+		编程式: 通过history.push()/replace() ==> 用于跳转前有逻辑处理的场景
+	
+	携带参数的3种方式
+		params: n个字符串   ==> 用得最多
+			携带数据: /home/message/detail/12/abc  
+			读取数据: this.props.match.params.id
+			注意: 注意路由时指定标识名称  /home/message/detail/:id/:xxx
+		query: n个字符串  ==> 用得少
+			携带数据: /home/message/detail/12/abc?name=tom&age=12
+			读取数据: this.props.location.search  ==> ?name=tom&age=12
+			注意: 得到数据不能直接使用, 需要手动处理 ==> 可以使用qs工具包
+		state: 一个任意类型数据, 一般是对象或数组 ==> 用得少些
+			携带数据: this.props.history.push(path, state数据对象/数组)
+			读取数据: this.props.location.state
+			注意: history模式才可用, hash模式不可用
+	
+	组件一个特别的props: children
+		是谁? 组件标签体内容
+		值是多少?
+		  字符串   ==> 组件标签体是文本
+		  标签对象  ==> 组件标签体是一个标签
+		  标签对象的数组 ==> 组件标签体是多个标签
+	
+	路由匹配的2种模式:
+		模糊匹配(默认): 请求的路径只是前面部分与路由的path相同就匹配了 ==> 对于多层嵌套的路由是必要的
+		完全匹配: 只请求路径与路由的path完全相同才匹配了 ==> <Route exact> ==> 多级路由路径对应同一级路由组件
