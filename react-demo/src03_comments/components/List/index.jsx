@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './index.css'
 
-import Item from '../Item'
+// import Item from '../Item'
+import Item from '@/components/Item'
+
 /* 
 列表组件
 */

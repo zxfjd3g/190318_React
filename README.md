@@ -176,3 +176,31 @@
 			勾选/不勾选一个todo
 			全选/全不选
 			删除所有选中的
+
+## 如何自定义create-react-app的配置
+	1). 暴露其配置后再修改
+		yarn run eject
+		修改暴露出来的webpack相关配置
+	2). 利用第三方工具包, 来扩展配置
+		下载: yarn add react-app-rewired customize-cra
+		配置启动命令:
+			  "scripts": {
+				-   "start": "react-scripts start",
+				+   "start": "react-app-rewired start",
+				-   "build": "react-scripts build",
+				+   "build": "react-app-rewired build",
+				-   "test": "react-scripts test",
+				+   "test": "react-app-rewired test",
+				    "eject": "react-scripts eject"
+				}
+		添加扩展配置: config-overrides.js
+			const {
+			  override,
+			  disableEsLint,
+			} = require("customize-cra");
+			// const path = require("path");
+			
+			module.exports = override(
+			  // 禁用eslint
+			  disableEsLint(),
+			);		
