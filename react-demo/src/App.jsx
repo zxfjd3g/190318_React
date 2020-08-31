@@ -1,31 +1,53 @@
 /*
 应用根组件
 */
-// rcc react class component
 import React, { Component } from 'react'
-import Search from './components/Search'
-import Main from './components/Main'
+import {HashRouter, BrowserRouter, Route, NavLink, Redirect, Switch} from 'react-router-dom'
+
+import Home from './views/Home'
+import About from './views/About'
+import MyNavLink from '@/components/MyNavLink'
 
 export default class App extends Component {
 
-  searchRef = React.createRef()
-
-  updateChild = () => {
-    // 得到子组件对象
-    const search = this.searchRef.current
-    // 调用子组件对象的方法更新子组件的状态
-    search.updateSearchName('--')
-  }
 
   render () {
     return (
-      <div>
-        <div className="container">
-          <button onClick={this.updateChild}>更新子组件数据</button>
-          <Search ref={this.searchRef}/>
-          <Main/>
+      <BrowserRouter>
+        <div>
+          <div className="row">
+            <div className="col-xs-offset-2 col-xs-8">
+              <div className="page-header">
+                <h2>Vue Router Demo</h2>
+              </div>
+            </div>
+          </div>
+          
+          <div className="row">
+            <div className="col-xs-2 col-xs-offset-2">
+              <div className="list-group">
+                {/* 导航路由链接 */}
+                <MyNavLink className="list-group-item" to="/about">About</MyNavLink>
+                <MyNavLink className="list-group-item" to="/home">Home</MyNavLink>
+              </div>
+            </div>
+            
+            <div className="col-xs-6">
+              <div className="panel">
+                <div className="panel-body">
+                  {/* 在此显示路由组件界面 */}
+                  <Switch> {/* 只产生第一个匹配的Route组件对象(从上向下查找) */}
+                    <Route path="/about" component={About}/>
+                    <Route path="/home" component={Home}/>
+                    {/* 写在最后 */}
+                    <Redirect to="/about"/>
+                  </Switch>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </BrowserRouter>
     )
   }
 }
