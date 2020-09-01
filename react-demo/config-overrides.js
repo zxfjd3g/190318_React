@@ -20,12 +20,13 @@ module.exports = override(
   fixBabelImports('import', { // 使用babel-plugin-import
       libraryName: 'antd', // 只针对antd库
       libraryDirectory: 'es', // 在es目录下查找组件的js
-      style: 'css', // 自动打包组件的对应的css
+      // style: 'css', // 自动打包组件的对应的css
+      style: true, // 找对应的less文件
   }),
 
   addLessLoader({	// 添加less配置
     lessOptions:{
-      modifyVars: { '@primary-color': '#00ff00'}, // 修改antd中less源码中的主颜色变量的值
+      modifyVars: { '@primary-color': '#1DA57A'}, // 修改antd中less源码中的主颜色变量的值
       javascriptEnabled: true,
     }
   }),

@@ -355,3 +355,32 @@
 	路由匹配的2种模式:
 		模糊匹配(默认): 请求的路径只是前面部分与路由的path相同就匹配了 ==> 对于多层嵌套的路由是必要的
 		完全匹配: 只请求路径与路由的path完全相同才匹配了 ==> <Route exact> ==> 多级路由路径对应同一级路由组件
+
+## 使用antd
+	在create-react-app创建的项目中来引入antd
+	基本配置使用
+		下载antd: yarn add antd
+		引入需要使用组件进行使用: import {Button} from 'antd'
+		引入antd的css样式: import 'antd/dist/antd.css'
+	高级配置使用(参照课件文档实现)
+		按需引入打包
+			下载: yarn add babel-plugin-import
+			配置: 
+				fixBabelImports('import', { // 使用babel-plugin-import
+				    libraryName: 'antd', // 只针对antd库
+				    libraryDirectory: 'es', // 在es目录下查找组件的js
+				    style: 'css', // 自动打包组件的对应的css
+				}),
+		自定义主题样式
+			下载: yarn add less less-loader
+			配置:
+				 fixBabelImports('import', {
+				   	...
+				    style: true,
+			  	}),
+				addLessLoader({	// 添加less配置
+					lessOptions:{
+				        modifyVars: { '@primary-color': '#1DA57A'}, // 修改antd中less源码中的主颜色变量的值
+						javascriptEnabled: true,
+					}
+				}),
