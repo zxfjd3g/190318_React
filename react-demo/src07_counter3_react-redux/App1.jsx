@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {increment, decrement, incrementAsync} from './redux/actions' // 引入action creator
+import {increment, decrement} from './redux/actions' // 引入action creator
 
 
 /* 
@@ -18,7 +18,6 @@ class App extends Component {
     // 函数属性
     increment: PropTypes.func.isRequired,
     decrement: PropTypes.func.isRequired,
-    incrementAsync: PropTypes.func.isRequired,
   }
   
 
@@ -42,7 +41,9 @@ class App extends Component {
 
   incrementAsync = () => {
     const number = this.refs.numberSelect.value * 1
-    this.props.incrementAsync(number)
+    setTimeout(() => {
+      this.props.increment(number)
+    }, 1000);
   }
 
   render () {
@@ -66,27 +67,29 @@ class App extends Component {
   }
 }
 
-export default connect(
-  state => ({count: state.count}),  // 指定count属性
-  {
-    increment, 
-    decrement,
-    incrementAsync
-  } // 指定increment/decrement函数属性
-)(App)
+/* 
+用于确定非函数属性的回调函数
+state: store中管理的状态值
+*/
+const mapStateToProps = (state) => {
+  return { // 返回对象的所有属性都会传给UI组件
+    count: state
+  }
+}
 
 /* 
-{
-  increment: increment, 
-  decrement: decrement
-}
-传递给UI组件的属性值
-  increment: (...args) => dispatch(increment(...args))
-  decrement: (...args) => dispatch(decrement(...args))
+用于确定函数属性的回调函数
+dispatch: 分发action函数
 */
+const mapDispatchToProps = (dispatch) => {
+  return {
+    increment: (number) => dispatch(increment(number)),
+    decrement: (number) => dispatch(decrement(number)),
+  }
+}
 
-// function fn (...args) { // ... args为数组, 数组的值[1, 2]
-//   fn2(...args) // 拆解数组中所有元素依次传递进fn2
-// }
-
-// fn(1, 2)
+// 当前返回就是connect产生的容器组件
+export default connect(
+  mapStateToProps,  // 用来指定向UI组件传入的非函数属性  count
+  mapDispatchToProps // 用来指定向UI组件传入的函数属性  increment/decrement
+)(App)

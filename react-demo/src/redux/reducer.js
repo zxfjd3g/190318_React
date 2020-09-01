@@ -4,6 +4,8 @@
   reducer的名称一般用要管理数据的名称来命名
 */
 
+import {combineReducers} from 'redux'
+
 import {
   INCREMENT,
   DECREMENT
@@ -11,9 +13,12 @@ import {
 
 
 // 指定初始状态值
-const initState = 1
+const initCount = 1
 
-export default function count (state=initState, action) {
+/* 
+管理count数据的reducer函数
+*/
+function count (state=initCount, action) {
   console.log('count', state, action)
   switch (action.type) {
     case INCREMENT:
@@ -24,3 +29,32 @@ export default function count (state=initState, action) {
      return state
   }
 }
+
+
+const initUser = {
+  id: 2,
+  name: 'tom'
+}
+/* 
+管理user数据的reducer函数
+*/
+function user (preState=initUser, action) {
+  switch (action.type) {
+    default:
+      return preState
+  }
+}
+
+// 合并多个子reducer生成一个新的总reducer函数
+export default combineReducers({
+  count, 
+  user
+})
+
+/* 
+总的state:
+  {
+    count: 1,   // 调用count()
+    user: {}    // 调用user()
+  }
+*/

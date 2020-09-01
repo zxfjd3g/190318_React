@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {increment, decrement, incrementAsync} from './redux/actions' // 引入action creator
+import {increment, decrement} from './redux/actions' // 引入action creator
 
 
 /* 
@@ -18,7 +18,6 @@ class App extends Component {
     // 函数属性
     increment: PropTypes.func.isRequired,
     decrement: PropTypes.func.isRequired,
-    incrementAsync: PropTypes.func.isRequired,
   }
   
 
@@ -42,7 +41,9 @@ class App extends Component {
 
   incrementAsync = () => {
     const number = this.refs.numberSelect.value * 1
-    this.props.incrementAsync(number)
+    setTimeout(() => {
+      this.props.increment(number)
+    }, 1000);
   }
 
   render () {
@@ -67,11 +68,10 @@ class App extends Component {
 }
 
 export default connect(
-  state => ({count: state.count}),  // 指定count属性
+  state => ({count: state}),  // 指定count属性
   {
     increment, 
-    decrement,
-    incrementAsync
+    decrement
   } // 指定increment/decrement函数属性
 )(App)
 
