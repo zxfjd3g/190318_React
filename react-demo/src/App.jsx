@@ -75,6 +75,9 @@ export default class App extends Component {
         <button onClick={this.decrement}>-</button>
         <button onClick={this.incrementIfOdd}>increment if odd</button>
         <button onClick={this.incrementAsync}>increment async</button>
+
+        <br/>
+        <button onClick={() => this.unSubcribe()}>不再更新</button>
       </div>
     )
   }
