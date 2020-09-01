@@ -1,7 +1,9 @@
 const {
   override,
   disableEsLint,
-  addWebpackAlias
+  addWebpackAlias,
+  fixBabelImports,
+  addLessLoader
 } = require("customize-cra");
 const path = require("path");
 
@@ -12,5 +14,19 @@ module.exports = override(
   // 配置模块路径别名
   addWebpackAlias({
     '@': path.resolve(__dirname, 'src') // src的绝对路径
-  })
+  }),
+
+  // 对antd实现按需引入打包
+  fixBabelImports('import', { // 使用babel-plugin-import
+      libraryName: 'antd', // 只针对antd库
+      libraryDirectory: 'es', // 在es目录下查找组件的js
+      style: 'css', // 自动打包组件的对应的css
+  }),
+
+  addLessLoader({	// 添加less配置
+    lessOptions:{
+      modifyVars: { '@primary-color': '#00ff00'}, // 修改antd中less源码中的主颜色变量的值
+      javascriptEnabled: true,
+    }
+  }),
 );
