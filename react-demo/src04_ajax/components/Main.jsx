@@ -52,7 +52,7 @@ export default class Main extends Component {
         loading: false,
         users
       })
-    }).catch((e) => {
+    }).catch((error) => {
       // 更新状态(失败的)
       this.setState({
         loading: false,
