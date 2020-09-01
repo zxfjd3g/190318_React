@@ -409,3 +409,113 @@
 	问题:
 		1)redux与react组件的代码耦合度太高: 直接在组件中使用了store
 		2)编码不够简洁
+
+## 使用react-redux
+	作用: 专门用来简化react应用中使用redux的react插件
+	下载: yarn add react-redux
+	使用 Provider
+		<Provider store={store}><App/></Provider>
+		作用: 向基所有任意层级的后后代容器组件提供store
+	使用connect
+		connect(
+			state => ({ // 将对象中的所有属性传递给UI组件App(一般属性), 属性值从store中的state中读取
+				count: state
+			}),
+	
+			dispatch => ({ // 将对象中的所有函数传递给UI组件App(函数属性), 一旦执行函数就会dispatch()更新store的state
+				increment: number => dispatch(increment(number)),
+				decrement: number => dispatch(decrement(number)),
+			})
+		)(App)		
+	
+		connect(
+			state => ({
+				count: state
+			}),
+	
+			{
+				increment, // 内部传递给App是: increment: (...args) => dispatch(increment(...args))   参数透传
+				decrement // 内部传递给App是: decrement: (...args) => dispatch(decrement(...args))
+			}
+		)(App)	
+	
+		区别容器组件与UI组件
+			UI组件
+				主要做界面显示, 不直接与redux(store)通信, 不直接使用任何redux相关API
+				通过接收一般属性得到store中的状态数据显示
+				通过接收函数属性, 内部调用它来更新store中的状态数据==> 更新组件
+			容器组件
+				通过connect产生的组件: connect()(UI组件) 返回的是容器组件
+				是redux与UI组件之间进行通信的桥梁(连接者):  
+				负责向UI组件传递一般属性, 属性值从state中读取
+				负责向UI组件传递函数属性, 函数内部调用dispatch()==>reducer调用 ==> 产生新状态数据 ==> 更新组件
+					class ContainerComp {
+						render () {
+							return <UIComp count={}  increment={} decrement={}/>
+						}
+					}
+			
+		高阶函数:
+			接收的参数是函数
+			返回值是函数
+		高阶组件:
+			一个特别的高阶函数: 接收的参数是组件, 且返回的也是组件
+		connect就是高阶函数, 但不是高阶组件
+		connect函数返回的函数才是高阶组件
+		注意: 交流时常说: connect高阶组件
+	问题:
+		redux本身不支持异步操作
+
+## redux-thunk
+	作用: 实现redux异步编码
+	下载: yarn add redux-thunk
+	使用:
+		应用上异步中间件: createStore(reducer, applyMiddleware(thunk))
+		定义异步action creator: 
+			incrementAsync = (number) => {
+			 return dispatch => {
+			  // 执行异步操作
+			  // 完成后, 分发同步action
+			 }
+			}
+		区别同步action与异步action
+			同步action: 对象类型 {type: 'xxx', data: value}
+			异步action: 函数类型 dispatch => {执行异步代码, 完成后, dispatch(同步action对象)}
+
+## 应用上redux调试工具:
+	下载redux的chrome
+	下载工具包: yarn add -D redux-devtools-extension
+	编写应用代码: 
+		process.env.NODE_ENV==='production' ? applyMiddleware(thunk)
+		 : composeWithDevTools(applyMiddleware(thunk)) 
+
+## 整合多个reducer
+	合并多个reducer:
+		combineReducers({
+		  count,
+		  user
+		})
+	总state的结构: 包含所有子reducer的状态数据的对象
+		{
+			count: 1,
+			user: {username, age}
+		}
+	组件中看到的state就是总的state
+
+## 将users练习改造成redux的版本
+	compoents
+		Search.jsx
+		Main.jsx
+	redux
+		store.js
+		reducers.js
+		actions.js
+		action-types.js
+	App.jsx
+	index.js
+
+	管理的状态数据:
+		firstView: true, // 是否显示第一个界面
+	    loading: false, // 是否存在加载中
+	    users: [], // 搜索得到的用户列表
+	    errorMsg: '', // 请求错误提示信息
