@@ -549,3 +549,109 @@
 
 		@withRouter
 		Header = withRouter(Header)
+
+## Context
+	理解
+		组件间通信方式, 常用用于祖孙组件间相互通信
+	使用:
+		1) 创建Context容器对象
+			const xxxContext = React.createContext(defaultValue)  
+			// defaultValue只有没指定Provider时才有效果, 可以不用指定
+		2) 在最外层包上Provider, 并指定要传递给后代组件的数据(任意类型)
+			<xxxContext.Provider value={数据}>子组件</xxxContext.Provider>
+		3) 任意后代组件, 读取数据
+			方式一: 只能用在类组件 
+			  static contextType = xxxContext  // 声明接收context
+			  this.context // 读取context中的value数据
+			方式二: 可以用在函数组件和类型组件
+			  <xxxContext.Consumer>
+			    {
+			      value => ( // value就是context中的value数据
+			        要显示的界面
+			      )
+			    }
+	      </xxxContext.Consumer>
+	应用:
+		react-redux就是利用context来向后代容器组件提供store的
+		react-router利用context向路由提供路由相关对象
+
+## Fragment
+	使用
+		<Fragment><Fragment>
+		<></>
+	作用
+		1) 可以不用必须有一个真实的DOM根标签了
+		2) 可以对多个标签进行统一的控制(比如: 显示/隐藏)
+		功能类似于vue中的<template>
+
+## 组件优化
+	Component组件的2个问题
+		1.只要执行setState(), 即使没有改变state数据, 组件也会更新执行render()
+		2.组件重新执行render(), 就让子组件也重新执行render()
+		===> 后果: 效率低
+	理想(高效)的做法:
+	  	只有state或者props数据发生改变, 才重新执行render()
+	原因: 
+	  	Component中的shouldComponentUpdate()方法总是返回true 
+	    ==> 只要当前组件或父组件setState(), 都会重新render()  说明: 产生新的虚拟DOM树, 但界面可能不用更新
+	解决:
+	  	办法1:
+			重写shouldComponentUpdate()
+			比较新旧state和props数据, 如果有变化才返回true, 否则返回false
+	  	办法2:
+		    使用PureComponent  ==> 开发中使用
+		    原理:
+				内部重写shouldComponentUpdate()
+				函数内部比较新旧state和props数据, 如果有变化才返回true, 否则返回false
+
+## 向组件内部动态传入组件结构
+	如何向组件内部动态传入带内容的结构(标签)?
+		Vue中: 
+			使用slot技术, 也就是通过组件标签体传入结构  <AA><BB/></AA>
+		React中:
+			使用children props: 通过组件标签体传入结构
+			使用render props: 通过组件标签属性传入结构, 一般用render函数属性
+	
+	children props:
+		<A>
+			<B></B>
+		</A>
+		{this.props.children}
+		问题: 如果B组件需要A组件内的数据, ==> 做不到 
+	
+	render props
+		<A render={(data) => <C data={data}></C>}></A>
+		A组件: {this.props.render(内部state数据)}
+		C组件: 读取A组件传入的数据显示 {this.props.data} 
+	
+	应用: 
+		在react-router中通过render props指定路由界面, 而不用再定义路由组件
+		<Route path="/home" render={() => <div>Home</div>} />
+
+## 路由组件懒加载
+	使用import()动态导入路由组件模块 ==> 路由组件会被code split(代码分割)单独打包
+	使用React提供的lazy函数来包装一下 ==> 只有当第一次请求路由时才会去后台加载其对应的打包文件(xxx.js)
+	使用<Suspense>组件来指定未加载得到路由打包文件前的提示界面
+
+## 工厂函数组件与ES6类组件的区别
+	函数组件没有this, 类组件有this (组件实例对象)
+	函数组件没有state/props/refs属性, 类组件对象有
+		state ==> 使用hooks语法   useState()
+		props ==> 函数的参数就是props
+		refs ==> 通过React.forwardRef()来得到并操作函数组件内的标签对象
+	函数组件没有组件生命周期回调(勾子)
+		componentDidMount(): 在挂载显示后执行 ==> 执行一次性异步任务
+		componentDidUpdate(): 在更新显示后执行  ==> 用得少些
+		componentWillUnmount(): 在组件卸载前执行 ==> 做一些收尾的工作
+	
+## Hooks
+	理解: react提供的一些新语法(函数)
+	作用: 让函数组件也可以有自己状态以及生命周期的处理(当然不止这些)
+	常用语法:
+	  useState(): 让函数组件有状态了, 向函数组件提供状态数据的读取和更新操作
+	      如果是立即调用, 使用 setCount(count + 2)
+	      如果延迟调用, 使用: setCount(count => count + 2)
+	  useEffect(): 相当于componentDidMount()来执行一些带副作用的操作, 
+	        常用的发ajax请求/启动定时器/订阅消息
+	  useRef(): 2个功能, 1.标识组件中的标签, 2.保存可变属性数据的容器
+	  useContext(): 在函数组件中得到Context容器对象中的value数据

@@ -26,6 +26,8 @@ Hooks
         常用的发ajax请求/启动定时器/订阅消息
   useRef(): 2个功能, 1.标识组件中的标签, 2.保存可变属性数据的容器
   useContext(): 在函数组件中得到Context容器对象中的value数据
+
+  注意: Hook调用的顺序和个数要固定
 */
 
 // 创建一个Context对象
@@ -58,9 +60,7 @@ function Hooks1(props) {
 
   console.log('Hook1()', num, name)
 
-  /* 
-  功能: 页面的title实时显示count值
-  */
+  
   /* 
   使用: useEffect
     useEffect(()=> {}) 相当于重写componentDidMount() 和componentDidUpdate()
@@ -81,10 +81,19 @@ function Hooks1(props) {
     多次调用useEffect(()=> {}, [xxx]) ==> 如果xxx的值变化了保存最新的回调函数
     多次调用useEffect(()=> {})  ==> 内部总是保存新指定回调函数
   */
-  useEffect(() => {
-    console.log('useEffect callback()', num, name)
-    document.title = num
-  }, [num])
+  /* 
+  功能: 页面的title实时显示count值
+  功能2: 如果num大于6就不再更新显示了
+  */
+  // if (num<=6) {
+    useEffect(() => {
+      if (num<=6) {
+        console.log('useEffect callback()', num, name)
+        document.title = num
+      }
+    }, [num])
+  // }
+  
 
   /* 
   功能: 过2s后让数量增加3
@@ -117,6 +126,8 @@ function Hooks1(props) {
       clearInterval(intervalId)
     }
   }, [])
+
+  
 
   return (
     <>
