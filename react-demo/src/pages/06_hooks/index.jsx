@@ -62,13 +62,20 @@ function Hooks1(props) {
     直接修改dom
     保存数据到浏览器存储
   setXxx()
-    setXxx(newValue)
+    setXxx(newValue) 
+      什么时候不能用: 在不监视任何state数据(第2个参数是[])的effect回调函数中不能使用
     setXxx(value => newValue)
+      什么时候都可用
+
+  注意: 
+    多次调用useEffect(()=> {}, []) ==> 内部保存的第一个回调函数
+    多次调用useEffect(()=> {}, [xxx]) ==> 如果xxx的值变化了保存最新的回调函数
+    多次调用useEffect(()=> {})  ==> 内部总是保存新指定回调函数
   */
   useEffect(() => {
-    console.log('useEffect callback()', num)
+    console.log('useEffect callback()', num, name)
     document.title = num
-  })
+  }, [num])
 
   /* 
   功能: 过2s后让数量增加3
