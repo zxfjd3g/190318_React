@@ -524,20 +524,28 @@
 ## 纯函数
 	1)一类特别的函数: 只要是同样的输入(参数)，必定得到同样的输出(返回值)
 	2). 要求:
-		1. 不要修改参数对象返回, 而要产生一个新的对象返回
-	2). 非纯函数: Date.now()
+		1.不要修改参数对象返回, 而要产生一个新的对象返回
+		2.不要读取/修改外部数据
+		3.只是根据传入函数进行计算得到一个你想要的结果数据
+	3). 例子
+		纯函数: reducer函数
+		非纯函数: Date.now()
 
-var c = 2
-const obj = {xxx: 4}
-function sum(a, b) {
-	
-	return a + b + c + obj.xxx
-}
+	arr.reduce(reducer函数, initValue)
+	arr.reduce((pre, item) => newPre)
 
-sum(1, 2)
-c = 3
-sume(1, 2)
+## 使用装饰器简化高阶组件的使用
+	下载插件包: @babel/plugin-proposal-decorators
+	配置插件: config-overrides.js中: addDecoratorsLegacy()
+	使用: 
+		装饰connect高阶组件: @connect(null, {search})
+		装饰withRouter高阶组件: @withRouter
+	装饰器语法的本质:
+		@decorator
+		class A {}
+		// 等同于
+		class A {}
+		A = decorator(A) || A
 
-function fn2 (obj) {
-   obj.xxx = 12
-}
+		@withRouter
+		Header = withRouter(Header)

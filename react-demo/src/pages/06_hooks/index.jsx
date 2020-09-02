@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component, useState, useEffect} from 'react'
 
 /* 
 文档: https://zh-hans.reactjs.org/docs/hooks-intro.html
@@ -28,26 +28,98 @@ Hooks
   useContext(): 在函数组件中得到Context容器对象中的value数据
 */
 
-export default class Hooks extends Component {
-  render() {
-    return (
-      <>
-        <Hooks1 />
-        <br/>
-        <br/>
-        <Hooks2 />
-      </>
-    )
-  }
+export default function Hook() {
+  return (
+    <>
+      <Hooks1 />
+      <br/>
+      <br/>
+      <Hooks2 />
+    </>
+  )
 }
 
 function Hooks1(props) {
+  // 使用useState Hook
+  /* 
+  const [xxx, setXxx] = useState(initValue), 
+    接收初始状态值, 返回包含内部存储的状态值和设置/更新状态值的函数的数组
+    initValue只在第一次调用useState时才会被使用到
+  */
+  const [num, setNum] = useState(1)
+  const [name, setName] = useState('tom')
+
+  console.log('Hook1()', num, name)
+
+  /* 
+  功能: 页面的title实时显示count值
+  使用: useEffect
+    useEffect(()=> {}) 相当于重写componentDidMount() 和componentDidUpdate()
+    useEffect(()=> {}, []) 相当于重写componentDidMount()
+    回调函数返回的函数在组件死亡前执行 ==> 相当于componentWillUnmount()
+  一般在effect回调中执行带副作的操作
+    异步操作: ajax请求, 启动定时, 绑定监听, 订阅消息
+    直接修改dom
+    保存数据到浏览器存储
+  setXxx()
+    setXxx(newValue)
+    setXxx(value => newValue)
+  */
+  useEffect(() => {
+    console.log('useEffect callback()', num)
+    document.title = num
+  })
+
+  /* 
+  功能: 过2s后让数量增加3
+  */
+  useEffect(() => {
+    console.log('useEffect callback2()')
+    const timeoutId = setTimeout(() => {
+      console.log('---------')
+      setNum(num + 3)
+    }, 3000)
+
+    return () => { // 返回函数在组件死亡前执行 ==> 相当于componentWillUnmount()
+      console.log('effect callback 返回的函数执行')
+      clearTimeout(timeoutId)
+    }
+  }, [])
+
+  /* 
+  功能: 每隔1s, name就会右侧加上++
+  */
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      console.log('+++++++', name)
+      // setName(name + '++')
+      // value就是内部存储的name值
+      // 函数返回一个新的name值
+      setName(value => value + '++')  // 一般在新值基本老值进行计算的
+    }, 1000)
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [])
+
+  /* 
+  Hook1()
+    name: tom
+  effect()
+  setInterval(() => {
+    name
+  }, );
+  */
+
+
+
+
   return (
     <>
       <h2>Hooks11标题</h2>
-      <p>name: ???</p>
-      <p>点击次数: ???</p>
-      <button>点击</button>
+      <p onClick={() => setName(name + '--')}>name: {name}</p>
+      <p>点击次数: {num}</p>
+      <button onClick={() => setNum(num + 2)}>点击</button>
     </>
   )
 }
