@@ -1,21 +1,16 @@
-/*
-应用根组件
-*/
-// rcc react class component
 import React, { Component } from 'react'
-import Search from './components/Search'
-import Main from './components/Main'
+import {BrowserRouter} from 'react-router-dom'
+import Header from './layout/Header'
+import Content from './layout/Content'
 
 export default class App extends Component {
 
-  render () {
+  render() {
     return (
-      <div>
-        <div className="container">
-          <Search/>
-          <Main/>
-        </div>
-      </div>
+      <BrowserRouter>
+        <Header/>
+        <Content/>
+      </BrowserRouter>
     )
   }
 }

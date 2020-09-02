@@ -1,0 +1,9 @@
+li {
+  display: inline-block;
+  margin: 5px;
+  font-size: 18px;
+}
+
+.active {
+  color: red !important;
+}

@@ -3,7 +3,8 @@ const {
   disableEsLint,
   addWebpackAlias,
   fixBabelImports,
-  addLessLoader
+  addLessLoader,
+  addDecoratorsLegacy
 } = require("customize-cra");
 const path = require("path");
 
@@ -30,4 +31,7 @@ module.exports = override(
       javascriptEnabled: true,
     }
   }),
+
+  // ES7的装饰器请求
+  addDecoratorsLegacy()
 );
