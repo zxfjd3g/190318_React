@@ -8,7 +8,7 @@ import './index.css'
 2) 根据配置动态生成路由链接<NavLink>
 */
 @withRouter
-class Header extends Component {
+export default class Header extends Component {
   /* 
   根据routes生成一级链接li的数组
   */
@@ -67,4 +67,5 @@ class Header extends Component {
   }
 }
 
-export default Header
+// Header = withRouter(Header)
+// export default Header

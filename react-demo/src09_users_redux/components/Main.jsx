@@ -1,9 +1,17 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 
+@connect(
+  state => ({
+    usersInfo: state.usersInfo,
+    // firstView: state.userInfo.firstView, 
+    // loading: state.userInfo.loading, 
+    // users: state.userInfo.users, 
+    // errorMsg: state.userInfo.errorMsg
+  }),
+  {}, // 不传递任何函数属性
+)
 class Main extends Component {
-
-
 
   render() {
     const {firstView, loading, users, errorMsg} = this.props.usersInfo
@@ -35,13 +43,4 @@ class Main extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    usersInfo: state.usersInfo,
-    // firstView: state.userInfo.firstView, 
-    // loading: state.userInfo.loading, 
-    // users: state.userInfo.users, 
-    // errorMsg: state.userInfo.errorMsg
-  }),
-  {}, // 不传递任何函数属性
-)(Main)
+export default Main
