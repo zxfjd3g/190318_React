@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect} from 'react'
+import React, { Component, useState, useEffect, useContext, useRef} from 'react'
 
 /* 
 文档: https://zh-hans.reactjs.org/docs/hooks-intro.html
@@ -10,7 +10,7 @@ import React, { Component, useState, useEffect} from 'react'
     refs ==> 通过React.forwardRef()来得到并操作函数组件内的标签对象
   3. 函数组件没有组件生命周期回调(勾子)
     componentDidMount(): 在挂载显示后执行 ==> 执行一次性异步任务
-    componentDidUpdate(): 在更新显示后执行  ==> 用得少
+    componentDidUpdate(): 在更新显示后执行  ==> 用得少些
     componentWillUnmount(): 在组件卸载前执行 ==> 做一些收尾的工作
   
     使用hooks语法 useEffect()
@@ -28,13 +28,20 @@ Hooks
   useContext(): 在函数组件中得到Context容器对象中的value数据
 */
 
+// 创建一个Context对象
+const Context = React.createContext()
+
+
 export default function Hook() {
   return (
     <>
       <Hooks1 />
       <br/>
       <br/>
-      <Hooks2 />
+      <Context.Provider value={'abc'}>
+        <Hooks2 />
+      </Context.Provider>
+      
     </>
   )
 }
@@ -53,6 +60,8 @@ function Hooks1(props) {
 
   /* 
   功能: 页面的title实时显示count值
+  */
+  /* 
   使用: useEffect
     useEffect(()=> {}) 相当于重写componentDidMount() 和componentDidUpdate()
     useEffect(()=> {}, []) 相当于重写componentDidMount()
@@ -109,18 +118,6 @@ function Hooks1(props) {
     }
   }, [])
 
-  /* 
-  Hook1()
-    name: tom
-  effect()
-  setInterval(() => {
-    name
-  }, );
-  */
-
-
-
-
   return (
     <>
       <h2>Hooks11标题</h2>
@@ -132,12 +129,26 @@ function Hooks1(props) {
 }
 
 function Hooks2(props) {
+  // 通过 useContext得到指定Context对象中的value值
+  const value = useContext(Context)
+
+  // 创建一个ref容器 (只有第一次调用才会创建一个新的, 后面再调用复用前面创建的)
+  const inputRef = useRef(null)
+  const idRef = useRef(2)
+
   return (
     <>
       <h2>Hooks22标题</h2>
-      <input type="text" /> &nbsp;
-      <button>点击插入</button>&nbsp;
-      <button>点击生成一个新ID</button> 
+     {/*  <Context.Consumer>
+        {
+          value => <h3>{value}</h3>
+        }
+      </Context.Consumer> */}
+      <h3>context.value={value}</h3>
+      <input type="text" ref={inputRef}/> &nbsp;
+      <button onClick={() => inputRef.current.focus()}>点击插入</button>&nbsp;
+      <button onClick={() => idRef.current++}>增加ID值</button> 
+      <button onClick={() => alert(idRef.current)}>读取ID值</button> 
     </>
   )
 }
