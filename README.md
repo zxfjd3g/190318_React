@@ -397,7 +397,7 @@
 			dispatch(action对象): 分发action ==> 触发reducer调用产生新的state数据		==> 相当于dispatch(actionName, data)
 			subscribe(listener): 监视store内部state数据的改变  ==> 用于在回调中更新组件
 		reducer: 函数 ==> 接收当前的state数据和指定的action对象来计算产生新的state数据   ==> 相当于mutation
-		actions: 工厂函数 ==> 用于产生action对象
+		actions: 工厂函数 ==> 用于产生action对象的action creator
 		action-types: 包含action对象的type名称常量									==> 相当于mutation-types
 
 	App.jsx
@@ -519,3 +519,25 @@
 	    loading: false, // 是否存在加载中
 	    users: [], // 搜索得到的用户列表
 	    errorMsg: '', // 请求错误提示信息
+
+
+## 纯函数
+	1)一类特别的函数: 只要是同样的输入(参数)，必定得到同样的输出(返回值)
+	2). 要求:
+		1. 不要修改参数对象返回, 而要产生一个新的对象返回
+	2). 非纯函数: Date.now()
+
+var c = 2
+const obj = {xxx: 4}
+function sum(a, b) {
+	
+	return a + b + c + obj.xxx
+}
+
+sum(1, 2)
+c = 3
+sume(1, 2)
+
+function fn2 (obj) {
+   obj.xxx = 12
+}
