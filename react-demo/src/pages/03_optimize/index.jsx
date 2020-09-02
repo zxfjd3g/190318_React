@@ -49,8 +49,8 @@ export default class Optimize extends Component {
   }
 }
 
-// class Child extends PureComponent {
-class Child extends Component {
+class Child extends PureComponent {
+// class Child extends Component {
 
   state = {
     m2: {
@@ -66,7 +66,7 @@ class Child extends Component {
   // 正确更新: 调用setState()指定新的状态数据
   handleClick2 = () => {
     this.setState({
-      m2: {count2: this.state.count2 + 1}
+      m2: {count2: this.state.m2.count2 + 1}
     })
   }
 

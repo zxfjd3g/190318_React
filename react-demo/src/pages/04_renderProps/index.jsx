@@ -29,17 +29,27 @@ export default class RenderProps extends Component {
   render() {
     return (
       <div>
-        RenderProps
+        <A render={(todos) => <C todos={todos}/>}>
+          <B/>
+        </A>
       </div>
     )
   }
 }
 
 class A extends Component {
+
+  state = {
+    todos: ['A', 'B', 'C']
+  }
+
   render() {
     return (
       <div>
         <h2>A组件标题</h2>
+        {this.props.children}
+
+        {this.props.render(this.state.todos)}
       </div>
     )
   }
@@ -63,6 +73,11 @@ class C extends Component {
     return (
       <div>
         <h3>C组件标题</h3>
+        <ul>
+          {
+            this.props.todos.map(todo => <li key={todo}>{todo}</li>)
+          }
+        </ul>
       </div>
     )
   }

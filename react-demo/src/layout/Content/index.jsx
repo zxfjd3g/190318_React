@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Suspense} from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
 import routes from '@/config/routes'
 
@@ -48,12 +48,15 @@ export default class Content extends Component {
 
   render() {
     return (
-      <div style={{margin: '10px'}}>
-        <Switch>
-          <Route path="/home" render={() => <div>Home</div>} />
-          {this.renderRouteTags()}
-        </Switch>
-      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <div style={{margin: '10px'}}>
+          <Switch>
+            <Route path="/home" render={() => <div>Home</div>} />
+            {this.renderRouteTags()}
+          </Switch>
+        </div>
+      </Suspense>
+      
     )
   }
 }

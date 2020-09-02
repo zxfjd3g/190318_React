@@ -41,7 +41,8 @@ export default class App extends Component {
                     {/* 访问根路径自动跳转到About */}
                     <Redirect from="/" to="/about" exact/>
                     {/* 没有子路由, 只有完全相同才匹配 */}
-                    <Route path="/about" component={About} exact/>
+                    {/* <Route path="/about" component={About} exact/> */}
+                    <Route path="/about" render={() => <div>About</div>} exact/>
                     {/* 有子路由, 不能使用完全匹配 */}
                     <Route path="/home" component={Home}/>
                     {/* 写在最后 */}
